@@ -26,7 +26,7 @@ export class HttpService {
   }
 
   updateAddressBook(id:number,body: any): Observable<any> {
-    return this.httpClient.put(this.baseUrl+"/update/?id="+id,body);
+    return this.httpClient.put(this.baseUrl + "/update/?id=" + id, body);
   }
 
 }
