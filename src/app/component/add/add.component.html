@@ -1,0 +1,91 @@
+<app-header></app-header>
+<div class="form-content">
+    <form class="form" [formGroup]="addressBookFormGroup" (ngSubmit)="submit()">
+        <div class="form-head">PERSON ADDRESS FORM
+            <span>
+                <a routerLink="/home">
+                    <img class="img" src="../../../assets/images/cancel.jpeg">
+                </a>
+            </span>
+        </div>
+
+        <!-------Input Name--------->
+        <div class="row-content">
+            <mat-label class="label">Full Name</mat-label>
+            <mat-form-field class="example-full-width" appearance="outline">
+                <input matInput placeholder="Your Name" ngDefaultControl formControlName="name">
+                <mat-error *ngIf="checkError('name', 'required')">Name is required</mat-error>
+                <mat-error *ngIf="checkError('name', 'pattern')">Name should start with upper
+                    case and should have minimum of 3 characters</mat-error>
+            </mat-form-field>
+        </div>
+
+        <!-------Input Phone Number--------->
+        <div class="row-content">
+            <mat-label class="label">Phone Number</mat-label>
+            <mat-form-field class="example-full-width" appearance="outline">
+                <input matInput placeholder="Phone Number" ngDefaultControl formControlName="phone">
+                <mat-error *ngIf="checkError('phone', 'required')">Phone Number is required</mat-error>
+                <mat-error *ngIf="checkError('phone', 'pattern')">Number should be of 10 digits</mat-error>
+            </mat-form-field>
+        </div>
+
+        <!-------Input Address--------->
+        <div class="row-content">
+            <mat-label class="label">Address</mat-label>
+            <mat-form-field class="example-full-width" appearance="outline">
+                <textarea matInput placeholder="" style="height:100px" ngDefaultControl
+                    formControlName="address"></textarea>
+                <mat-error *ngIf="checkError('address', 'required')">Address is required</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="row-content-address">
+
+            <!--------Input City --------->
+            <div class="city-container subAddress">
+                <mat-label class="label">City</mat-label>
+                <mat-form-field appearance="outline">
+                    <mat-label class="label">Select City</mat-label>
+                    <mat-select ngDefaultControl formControlName="city">
+                        <mat-option value="Akola">Akola</mat-option>
+                        <mat-option value="Raipur">Raipur</mat-option>
+                        <mat-option value="Patna">Patna</mat-option>
+                        <mat-option value="Nagaur">Nagaur</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="checkError('city', 'required')">City is required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <!---------Input State------- -->
+            <div class="state-container subAddress">
+                <mat-label class="label">State</mat-label>
+                <mat-form-field appearance="outline">
+                    <mat-label class="label">Select State</mat-label>
+                    <mat-select ngDefaultControl formControlName="state">
+                        <mat-option value="Maharashtra">Maharashtra</mat-option>
+                        <mat-option value="MP">MadhyaPradesh</mat-option>
+                        <mat-option value="Bihar">Bihar</mat-option>
+                        <mat-option value="Rajasthan">Rajasthan</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="checkError('state', 'required')">State is required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <!--------Input Zip Code--------->
+            <div class="zip-container subAddress">
+                <mat-label class="label">Zip Code</mat-label>
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <input matInput ngDefaultControl formControlName="zip">
+                    <mat-error *ngIf="checkError('zip', 'pattern')">ZipCode should be of 6 digits</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!------Submit Reset Buttons ------->
+        <div class="add-reset">
+            <button mat-raised-button class="button" type="submit">Add</button>
+            <button mat-raised-button class="button" type="reset">Reset</button>
+        </div>
+    </form>
+</div>
