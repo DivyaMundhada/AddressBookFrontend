@@ -43,7 +43,7 @@
         <div class="row-content-address">
 
             <!--------Input City --------->
-            <div class="city-container subAddress">
+            <!-- <div class="city-container subAddress">
                 <mat-label class="label">City</mat-label>
                 <mat-form-field appearance="outline">
                     <mat-label class="label">Select City</mat-label>
@@ -55,10 +55,22 @@
                     </mat-select>
                     <mat-error *ngIf="checkError('city', 'required')">City is required</mat-error>
                 </mat-form-field>
+            </div> -->
+
+            <div class="city-container subAddress">
+                <mat-label class="label">City</mat-label>
+                <mat-form-field appearance="outline">
+                    <mat-label class="label">Select City</mat-label>
+                    <mat-select ngDefaultControl formControlName="city">
+                        <mat-option *ngFor="let city of cities" [value]="city">
+                            {{city}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
 
             <!---------Input State------- -->
-            <div class="state-container subAddress">
+            <!-- <div class="state-container subAddress">
                 <mat-label class="label">State</mat-label>
                 <mat-form-field appearance="outline">
                     <mat-label class="label">Select State</mat-label>
@@ -69,6 +81,19 @@
                         <mat-option value="Rajasthan">Rajasthan</mat-option>
                     </mat-select>
                     <mat-error *ngIf="checkError('state', 'required')">State is required</mat-error>
+                </mat-form-field>
+            </div> -->
+
+            <div class="state-container subAddress">
+                <mat-label class="label">State</mat-label>
+                <mat-form-field appearance="outline">
+                    <mat-label class="label">Select State</mat-label>
+                    <mat-select (selectionChange)="getCity($event.source.value)" ngDefaultControl
+                        formControlName="state">
+                        <mat-option *ngFor="let state of states" [value]="state">
+                            {{state}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
 
@@ -84,8 +109,16 @@
 
         <!------Submit Reset Buttons ------->
         <div class="add-reset">
-            <button mat-raised-button class="button" type="submit">Add</button>
-            <button mat-raised-button class="button" type="reset">Reset</button>
+            <div *ngIf="router.url === '/add'; else updateBlock">
+                <button mat-raised-button class="button" type="submit">{{leftButton}}</button>
+                <button mat-raised-button class="button" type="reset">{{rightButton}}</button>
+            </div>
+            <ng-template #updateBlock>
+                <div>
+                    <button mat-raised-button class="button" type="submit">{{leftButton}}</button>
+                    <button mat-raised-button class="button" routerLink="/home">{{rightButton}}</button>
+                </div>
+            </ng-template>
         </div>
     </form>
 </div>

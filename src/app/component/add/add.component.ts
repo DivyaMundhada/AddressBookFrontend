@@ -14,6 +14,12 @@ import { HttpService } from 'src/app/service/http.service';
 export class AddComponent implements OnInit {
   public addressBook: Addressbook = new Addressbook;
   public addressBookFormGroup: FormGroup = new FormGroup({});
+  public leftButton: string = "Add";
+  public rightButton: string = "Reset";
+  public states: Array<any> = [];
+  public cities: Array<any> = [];
+  public stateDetails: Array<any> = [];
+  id: any;
 
   /**
   * Added Validation to the Address Book Fields.
@@ -21,7 +27,7 @@ export class AddComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private httpService: HttpService,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     private snackBar: MatSnackBar,
     private dataService: DataService) {
     this.addressBookFormGroup = this.formBuilder.group({
@@ -40,19 +46,20 @@ export class AddComponent implements OnInit {
   */
 
   ngOnInit(): void {
+    
     if (this.activatedRoute.snapshot.params['id'] != undefined) {
-      this.dataService.currentAddressBook.subscribe(addressBook => {
-        if (Object.keys(addressBook).length !== 0) {
-          console.log(addressBook);
-          this.addressBookFormGroup.get('name')?.setValue(addressBook.name);
-          this.addressBookFormGroup.get('phone')?.setValue(addressBook.phone);
-          this.addressBookFormGroup.get('address')?.setValue(addressBook.address);
-          this.addressBookFormGroup.get('city')?.setValue(addressBook.city);
-          this.addressBookFormGroup.get('state')?.setValue(addressBook.state);
-          this.addressBookFormGroup.get('zip')?.setValue(addressBook.zip);
+      this.leftButton = "Update";
+      this.rightButton = "Cancel";
+      this.id = this.activatedRoute.snapshot.params['id']
+      this.httpService.getAddressBookDetailsByID(this.id).subscribe(x => {
+        console.log(x.data);
+        this.addressBookFormGroup.patchValue(x.data);
+        if (x.data.state) {
+          this.getCity(x.data.state);
         }
       });
     }
+    this.getState();
   }
 
   /**
@@ -76,9 +83,34 @@ export class AddComponent implements OnInit {
         console.log(response);
         this.router.navigateByUrl('/home');
         this.snackBar.open("User Data Submitted Successfully", "Submitted", { duration: 3000 });
-      });
+      
+     
+      // }, error => {
+      //   this.snackBar.open("Phone Number already exists", "Change Number", { duration: 8000 })
+    });
+  
+}
+  }
+
+getCity(state: any) {
+  // console.log("hi");
+  for (let i = 0; i < this.stateDetails.length; i++) {
+    if (this.stateDetails[i]?.state === state) {
+      this.cities = this.stateDetails[i]?.city;
+      console.log(this.stateDetails[i]?.city);
     }
   }
+}
+
+getState(): void {
+  this.httpService.getStateDetails().subscribe(data => {
+    this.stateDetails = data.data;
+    console.log(this.stateDetails);
+    for (let i = 0; i < this.stateDetails.length; i++) {
+      this.states.push(this.stateDetails[i]?.state);
+    }
+  });
+}
 
   /**
    * Method to show error when validating the input by the user.
